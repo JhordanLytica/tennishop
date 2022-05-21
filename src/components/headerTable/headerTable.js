@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import HeaderTableStyle from "./styles";
 import IconButton from '@mui/material/IconButton';
@@ -8,12 +9,24 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Iconadd from '../image/Grupo3.svg';
 import Iconsearch from '../image/feather-search.svg';
+import { searchProducts, fetchAllProducts } from "../../Container/Table/fetch";
 
 const HeaderTable = () => {
   const [value, setValue] = useState('');
   let navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleClick = () => {
     navigate("/add/product");
+  }
+
+  const search = (e) => {
+    setValue(e.target.value);
+    if (e.target.value !== '') {
+      dispatch(searchProducts(e.target.value));
+    } else {
+      dispatch(fetchAllProducts());
+    }
   }
 
   return (
@@ -27,7 +40,7 @@ const HeaderTable = () => {
           <Input
             type='text'
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={search}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
